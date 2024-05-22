@@ -1,0 +1,70 @@
+  <%- include('partials/header') %> 
+  <%- include('partials/nav') %> 
+
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Library</h1>
+
+    <!-- Button to open the add book modal -->
+    <div class="text-center mb-4">
+      <button type="button" class="btn btn-primary" id="openAddBookModal">
+        Add Book
+      </button>
+    </div>
+
+    <!-- Add Book Modal -->
+    <div class="modal fade" id="addBookModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header d-flex justify-content-between">
+            <h5 class="modal-title" id="addBookModalLabel">Add a New Book</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- form started here .... -->
+            <form id="addBookForm" action="" method="">
+              <div class="form-group">
+                <label for="bookTitle">Book Title</label>
+                <input name="bookTitle" type="text" class="form-control" id="bookTitle" required>
+              </div>
+              <div class="form-group">
+                <label for="bookAuthor">Author</label>
+                <input name="bookAuthor" type="text" class="form-control" id="bookAuthor" required>
+              </div>
+              <div class="form-group">
+                <label for="bookDescription">Description</label>
+                <textarea name="bookDescription" class="form-control" id="bookDescription" rows="3" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary mt-3">Add Book</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('partials/footer') %> 
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const openModalButton = document.getElementById('openAddBookModal');
+      const closeModalButton = document.getElementById('closeModal');
+      const addBookModal = new bootstrap.Modal(document.getElementById('addBookModal'));
+
+      // Open modal
+      openModalButton.addEventListener('click', () => {
+        addBookModal.show();
+      });
+
+      // Close modal
+      closeModalButton.addEventListener('click', () => {
+        addBookModal.hide();
+      });
+
+      // Close modal when clicking outside of the modal content
+      window.addEventListener('click', (event) => {
+        if (event.target == addBookModal) {
+          addBookModal.hide();
+        }
+      });
+    });
+  </script>
