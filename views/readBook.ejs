@@ -1,0 +1,27 @@
+<link rel='stylesheet' href='/stylesheets/readBook.css' />
+<%- include('partials/header') %> <%- include('partials/nav') %>
+<div class="container d-flex p-0">
+          <!-- Left Panel -->
+          <div class="left-panel">
+              <img src="<%= book.coverImage %>" class="card-img" alt="Book Cover">
+          </div>
+          
+          <!-- Right Panel -->
+          <div class="right-panel">
+            <div class="d-flex justify-content-between align-items-center">
+              <h2>Title : <%=book.title %></h2>
+              <h6>ISBN No : <%=book.isbnNumber %></h6>
+            </div>
+            <h5 class="ms-2">Author : <%= book.author %></h5>
+            <div>
+                <h5 class="ms-2">Content : </h5>
+                <div class="content">
+                    <pre><%= book.description %></pre>
+                  </div>
+            </div>
+            <h3>Price : <%= book.price %></h3>
+          </div>
+
+        </div>
+    
+<%- include('partials/footer') %>

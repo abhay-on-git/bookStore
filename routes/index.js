@@ -1,7 +1,8 @@
 var express = require("express");
 const Book = require("../models/book");
 const multer = require("multer");
-var router = express.Router();
+const mongoose = require('mongoose');
+const router = express.Router();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -33,6 +34,17 @@ router.get("/library", async function (req, res, next) {
 });
 router.get("/about", function (req, res, next) {
   res.render("about");
+});
+router.get("/readBook/:id", async function (req, res, next) {
+  const bookID = new mongoose.Types.ObjectId(req.params.id);
+  try {
+    const book = await Book.findById(bookID);
+    res.render("readBook",{book});
+  } catch (error) {
+    console.log('error in reading book');
+    console.log(error.message);
+    res.send(error.message);
+  }
 });
 router.post("/createBook", upload.single("coverImage"), async (req, res) => {
   try {
