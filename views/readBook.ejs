@@ -1,5 +1,49 @@
 <link rel='stylesheet' href='/stylesheets/readBook.css' />
 <%- include('partials/header') %> <%- include('partials/nav') %>
+         <!-- Edit book modal -->
+         <div class="modal fade" id="editBookModal" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+              <div class="modal-header d-flex justify-content-between">
+                <h5 class="modal-title" id="editBookModalLabel">Update Your Book Here...</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <!-- form started here .... -->
+                <form id="addBookForm" action="/edit/<%= book._id %>" method="post" enctype="multipart/form-data">
+                  <div class="form-group mb-3 ">
+                    <label for="bookTitle mb-1">Book Title</label>
+                    <input name="bookTitle" type="text" class="form-control" id="bookTitle" value="<%= book.title %>">
+                  </div>
+                  <div class="form-group mb-3">
+                    <label class="mb-1" for="coverImage">Cover Image</label>
+                    <input name="coverImage" type="file" class="form-control" id="coverImage">
+                  </div>
+                  <div class="form-group mb-3">
+                    <label class="mb-1" for="bookAuthor">Author</label>
+                    <input name="bookAuthor" type="text" class="form-control" id="bookAuthor" value="<%= book.author %>">
+                  </div>
+                  <div class="form-group mb-3">
+                    <label class="mb-1" for="bookDescription">Description</label>
+                    <textarea name="bookDescription" class="form-control" id="bookDescription" rows="3"><%= book.description %></textarea>
+                  </div>
+                  <div class="form-group mb-3 d-flex gap-4 justify-content-between">
+                    <div class="w-50">
+                      <label class="mb-1" for="isbnNumber">ISBN Number</label>
+                    <input name="isbnNumber" type="text" class="form-control" id="isbnNumber" value="<%= book.isbnNumber%>">
+                    </div>
+                    <div class=" w-50">
+                      <label class="mb-1" for="price">MRP</label>
+                    <input name="price" type="text" class="form-control" id="price" value="<%= book.price %>">
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary mt-3">Update Book</button>
+                </form>
+              </div>
+            </div>
+          <!-- </div> -->
+        </div>
+      </div>
 <div class="container d-flex p-0">
           <!-- Left Panel -->
           <div class="left-panel">
@@ -19,9 +63,42 @@
                     <pre><%= book.description %></pre>
                   </div>
             </div>
-            <h3>Price : <%= book.price %></h3>
+            <div class="d-flex justify-content-between">
+              <h3>Price : <%= book.price %></h3>
+              <div>
+                    <button type="submit" id="editbtn" class="btn btn-primary">Edit Book</button>
+                <form action="/delete/<%= book._id %>" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Delete Book</button>
+                </form>
+            </div>
+            </div>
           </div>
 
-        </div>
+ 
     
 <%- include('partials/footer') %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const openModalButton = document.getElementById('editbtn');
+    const closeModalButton = document.getElementById('closeModal');
+    const editBookModal = new bootstrap.Modal(document.getElementById('editBookModal'));
+
+    // Open modal
+    openModalButton.addEventListener('click', () => {
+      editBookModal.show();
+    });
+
+    // Close modal
+    closeModalButton.addEventListener('click', () => {
+      editBookModal.hide();
+    });
+
+    // Close modal when clicking outside of the modal content
+    window.addEventListener('click', (event) => {
+      if (event.target == editBookModal) {
+        editBookModal.hide();
+      }
+    });
+  });
+</script>

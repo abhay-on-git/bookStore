@@ -36,7 +36,7 @@ router.get("/about", function (req, res, next) {
   res.render("about");
 });
 router.get("/readBook/:id", async function (req, res, next) {
-  const bookID = new mongoose.Types.ObjectId(req.params.id);
+  const bookID = req.params.id;
   try {
     const book = await Book.findById(bookID);
     res.render("readBook",{book});
@@ -70,6 +70,56 @@ router.post("/createBook", upload.single("coverImage"), async (req, res) => {
   } catch (error) {
     console.log('Error in creating the book');
     console.log(error.message);
+    res.status(500).send(error.message);
+  }
+});
+
+router.post('/delete/:id', async (req, res) => {
+  const bookID = req.params.id;
+  try {
+    await Book.findByIdAndDelete(bookID);
+    console.log(`Book with ID ${bookID} deleted`);
+    res.redirect('/library');
+  } catch (error) {
+    console.log('Error in deleting the book');
+    console.log(error.message);
+    res.status(500).send(error.message);
+  }
+});
+
+router.post('/edit/:id',upload.single("coverImage"), async (req, res) => {
+  const bookID = req.params.id;
+  const { bookTitle, bookAuthor, bookDescription, isbnNumber, price } = req.body;
+
+  try {
+
+    const book = await Book.findById(bookID);
+
+    const updateData = {
+      title: bookTitle,
+      author: bookAuthor,
+      description: bookDescription,
+      isbnNumber: isbnNumber,
+      price: price
+    }
+
+    if(req.file) {
+      updateData.coverImage = `/uploads/${req.file.filename}`
+    }else{
+      updateData.coverImage = book.coverImage;
+    }
+
+    const updatedBook = await Book.findByIdAndUpdate(bookID, updateData, { new: true });
+
+    if (!updatedBook) {
+      return res.status(404).send('Book not found');
+    }
+
+    console.log('Book updated successfully:', updatedBook);
+
+    res.redirect('/library');
+  } catch (error) {
+    console.log('Error in updating the book:', error.message);
     res.status(500).send(error.message);
   }
 });
