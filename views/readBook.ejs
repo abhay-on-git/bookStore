@@ -12,7 +12,6 @@
                 <!-- form started here .... -->
                 <form id="addBookForm" action="/edit/<%= book._id %>" method="post" enctype="multipart/form-data">
                   <div class="form-group mb-3 ">
-                    <label for="bookTitle mb-1">Book Title</label>
                     <input name="bookTitle" type="text" class="form-control" id="bookTitle" value="<%= book.title %>">
                   </div>
                   <div class="form-group mb-3">
@@ -58,13 +57,12 @@
             </div>
             <h5 class="ms-2">Author : <%= book.author %></h5>
             <div>
-                <h5 class="ms-2">Content : </h5>
                 <div class="content">
                     <pre><%= book.description %></pre>
                   </div>
             </div>
             <div class="d-flex justify-content-between">
-              <h3>Price : <%= book.price %></h3>
+              <h3>Price : ₹<%= book.price %></h3>
               <div>
                     <button type="submit" id="editbtn" class="btn btn-primary">Edit Book</button>
                 <form action="/delete/<%= book._id %>" method="post" style="display:inline;">
