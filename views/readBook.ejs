@@ -11,6 +11,7 @@
               <div class="modal-body">
                 <!-- form started here .... -->
                 <form id="addBookForm" action="/edit/<%= book._id %>" method="post" enctype="multipart/form-data">
+                  <input type="hidden" name="oldImage" value="<%= book.coverImage %>">
                   <div class="form-group mb-3 ">
                     <input name="bookTitle" type="text" class="form-control" id="bookTitle" value="<%= book.title %>">
                   </div>

@@ -1,20 +1,11 @@
 var express = require("express");
 const Book = require("../models/book");
-const multer = require("multer");
 const mongoose = require('mongoose');
 const router = express.Router();
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads");
-  },
-  filename: function (req, file, cb) {
-    newFile = Date.now() + "-" + file.originalname;
-    cb(null, newFile);
-  },
-});
-
-const upload = multer({ storage: storage });
+const checkprice = require('../utils/checkPrice')
+const upload = require('../utils/multer')
+const path = require('path')
+const fs = require('fs')
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -46,7 +37,7 @@ router.get("/readBook/:id", async function (req, res, next) {
     res.send(error.message);
   }
 });
-router.post("/createBook", upload.single("coverImage"), async (req, res) => {
+router.post("/createBook",upload.single("coverImage"), async (req, res) => {
   try {
     const { bookTitle, bookAuthor, bookDescription, isbnNumber, price } = req.body;
     console.log('Received data:', req.body);
@@ -77,7 +68,8 @@ router.post("/createBook", upload.single("coverImage"), async (req, res) => {
 router.post('/delete/:id', async (req, res) => {
   const bookID = req.params.id;
   try {
-    await Book.findByIdAndDelete(bookID);
+    const book = await Book.findByIdAndDelete(bookID);
+    fs.unlinkSync(path.join(__dirname, `../uploads/${book.coverImage}`));
     console.log(`Book with ID ${bookID} deleted`);
     res.redirect('/library');
   } catch (error) {
@@ -105,6 +97,7 @@ router.post('/edit/:id',upload.single("coverImage"), async (req, res) => {
 
     if(req.file) {
       updateData.coverImage = `/uploads/${req.file.filename}`
+      fs.unlinkSync(path.join(__dirname+'..'+'uploads'+`${book.oldImage}`))
     }else{
       updateData.coverImage = book.coverImage;
     }
