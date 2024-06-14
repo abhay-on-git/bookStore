@@ -6,6 +6,8 @@ const checkprice = require('../utils/checkPrice')
 const upload = require('../utils/multer')
 const path = require('path')
 const fs = require('fs')
+const sendmail = require("../utils/mailer").sendmail; // Correct import
+
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -117,4 +119,8 @@ router.post('/edit/:id',upload.single("coverImage"), async (req, res) => {
   }
 });
 
+
+router.post('/send-mail',(req,res)=>{
+  sendmail(req,res)
+})
 module.exports = router;
